@@ -9,7 +9,7 @@ output:
 ---
 
 ## Instructions
-Answer the following questions and complete the exercises in RMarkdown. Please embed all of your code and push your final work to our [GitHub repository](https://github.com/FRS417-DataScienceBiologists). I will randomly select a few examples of student work at the start of each session to use as examples so be sure that your code is working to the best of your ability.
+Answer the following questions and complete the exercises in RMarkdown. Please embed all of your code and push your final work to your repository. Your final lab report should be organized, clean, and run free from errors. Remember, you must remove the `#` for the included code chunks to run.  
 
 ## Load the tidyverse
 ```{r}
@@ -57,6 +57,7 @@ summary(sleep)
 ```{r}
 sleep[ ,1]
 ```
+
 ```{r}
 sleep[1, ]
 ```
@@ -67,6 +68,7 @@ sleep[1, ]
 small <- filter(sleep, bodywt<=1)
 small
 ```
+
 ```{r}
 large <- filter(sleep, bodywt>=200)
 large
@@ -96,12 +98,14 @@ mean(small$sleep_total)
 ```{r}
 max(sleep$sleep_total)
 ```
+
 ```{r}
 filter(sleep, sleep_total == 19.9)
 ```
+
 ```{r}
 filter(sleep, sleep_total>=18)
 ```
 
-
-## Push your final code to GitHub
+## Push your final code to GitHub!
+Please be sure that you check the `keep md` file in the knit preferences.  

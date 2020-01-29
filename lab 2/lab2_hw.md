@@ -9,7 +9,7 @@ output:
 ---
 
 ## Instructions
-Answer the following questions and complete the exercises in RMarkdown. Please embed all of your code and push your final work to our [GitHub repository](https://github.com/FRS417-DataScienceBiologists). I will randomly select a few examples of student work at the start of each session to use as examples so be sure that your code is working to the best of your ability.
+Answer the following questions and complete the exercises in RMarkdown. Please embed all of your code and push your final work to your repository. Your final lab report should be organized, clean, and run free from errors. Remember, you must remove the `#` for the included code chunks to run.  
 
 ## Load the tidyverse
 
@@ -18,20 +18,20 @@ library("tidyverse")
 ```
 
 ```
-## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
+## ── Attaching packages ─────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──
 ```
 
 ```
-## ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
-## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
-## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
-## ✔ readr   1.3.1     ✔ forcats 0.4.0
+## ✓ ggplot2 3.2.1     ✓ purrr   0.3.3
+## ✓ tibble  2.1.3     ✓ dplyr   0.8.3
+## ✓ tidyr   1.0.0     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.4.0
 ```
 
 ```
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
+## ── Conflicts ────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
 ```
 
 ## Mammals Sleep
@@ -43,20 +43,19 @@ msleep
 
 ```
 ## # A tibble: 83 x 11
-##    name  genus vore  order conservation sleep_total sleep_rem sleep_cycle
-##    <chr> <chr> <chr> <chr> <chr>              <dbl>     <dbl>       <dbl>
-##  1 Chee… Acin… carni Carn… lc                  12.1      NA        NA    
-##  2 Owl … Aotus omni  Prim… <NA>                17         1.8      NA    
-##  3 Moun… Aplo… herbi Rode… nt                  14.4       2.4      NA    
-##  4 Grea… Blar… omni  Sori… lc                  14.9       2.3       0.133
-##  5 Cow   Bos   herbi Arti… domesticated         4         0.7       0.667
-##  6 Thre… Brad… herbi Pilo… <NA>                14.4       2.2       0.767
-##  7 Nort… Call… carni Carn… vu                   8.7       1.4       0.383
-##  8 Vesp… Calo… <NA>  Rode… <NA>                 7        NA        NA    
-##  9 Dog   Canis carni Carn… domesticated        10.1       2.9       0.333
-## 10 Roe … Capr… herbi Arti… lc                   3        NA        NA    
-## # … with 73 more rows, and 3 more variables: awake <dbl>, brainwt <dbl>,
-## #   bodywt <dbl>
+##    name  genus vore  order conservation sleep_total sleep_rem sleep_cycle awake
+##    <chr> <chr> <chr> <chr> <chr>              <dbl>     <dbl>       <dbl> <dbl>
+##  1 Chee… Acin… carni Carn… lc                  12.1      NA        NA      11.9
+##  2 Owl … Aotus omni  Prim… <NA>                17         1.8      NA       7  
+##  3 Moun… Aplo… herbi Rode… nt                  14.4       2.4      NA       9.6
+##  4 Grea… Blar… omni  Sori… lc                  14.9       2.3       0.133   9.1
+##  5 Cow   Bos   herbi Arti… domesticated         4         0.7       0.667  20  
+##  6 Thre… Brad… herbi Pilo… <NA>                14.4       2.2       0.767   9.6
+##  7 Nort… Call… carni Carn… vu                   8.7       1.4       0.383  15.3
+##  8 Vesp… Calo… <NA>  Rode… <NA>                 7        NA        NA      17  
+##  9 Dog   Canis carni Carn… domesticated        10.1       2.9       0.333  13.9
+## 10 Roe … Capr… herbi Arti… lc                   3        NA        NA      21  
+## # … with 73 more rows, and 2 more variables: brainwt <dbl>, bodywt <dbl>
 ```
 
 1. From which publication are these data taken from? Don't do an internet search; show the code that you would use to find out in R.
@@ -252,9 +251,9 @@ colnames(sleep)
 ```
 
 ```
-##  [1] "name"         "genus"        "vore"         "order"       
-##  [5] "conservation" "sleep_total"  "sleep_rem"    "sleep_cycle" 
-##  [9] "awake"        "brainwt"      "bodywt"
+##  [1] "name"         "genus"        "vore"         "order"        "conservation"
+##  [6] "sleep_total"  "sleep_rem"    "sleep_cycle"  "awake"        "brainwt"     
+## [11] "bodywt"
 ```
 
 
@@ -267,17 +266,17 @@ glimpse(sleep)
 ```
 ## Observations: 83
 ## Variables: 11
-## $ name         <chr> "Cheetah", "Owl monkey", "Mountain beaver", "Greate…
-## $ genus        <chr> "Acinonyx", "Aotus", "Aplodontia", "Blarina", "Bos"…
-## $ vore         <chr> "carni", "omni", "herbi", "omni", "herbi", "herbi",…
-## $ order        <chr> "Carnivora", "Primates", "Rodentia", "Soricomorpha"…
-## $ conservation <chr> "lc", NA, "nt", "lc", "domesticated", NA, "vu", NA,…
-## $ sleep_total  <dbl> 12.1, 17.0, 14.4, 14.9, 4.0, 14.4, 8.7, 7.0, 10.1, …
-## $ sleep_rem    <dbl> NA, 1.8, 2.4, 2.3, 0.7, 2.2, 1.4, NA, 2.9, NA, 0.6,…
-## $ sleep_cycle  <dbl> NA, NA, NA, 0.1333333, 0.6666667, 0.7666667, 0.3833…
-## $ awake        <dbl> 11.9, 7.0, 9.6, 9.1, 20.0, 9.6, 15.3, 17.0, 13.9, 2…
-## $ brainwt      <dbl> NA, 0.01550, NA, 0.00029, 0.42300, NA, NA, NA, 0.07…
-## $ bodywt       <dbl> 50.000, 0.480, 1.350, 0.019, 600.000, 3.850, 20.490…
+## $ name         <chr> "Cheetah", "Owl monkey", "Mountain beaver", "Greater sho…
+## $ genus        <chr> "Acinonyx", "Aotus", "Aplodontia", "Blarina", "Bos", "Br…
+## $ vore         <chr> "carni", "omni", "herbi", "omni", "herbi", "herbi", "car…
+## $ order        <chr> "Carnivora", "Primates", "Rodentia", "Soricomorpha", "Ar…
+## $ conservation <chr> "lc", NA, "nt", "lc", "domesticated", NA, "vu", NA, "dom…
+## $ sleep_total  <dbl> 12.1, 17.0, 14.4, 14.9, 4.0, 14.4, 8.7, 7.0, 10.1, 3.0, …
+## $ sleep_rem    <dbl> NA, 1.8, 2.4, 2.3, 0.7, 2.2, 1.4, NA, 2.9, NA, 0.6, 0.8,…
+## $ sleep_cycle  <dbl> NA, NA, NA, 0.1333333, 0.6666667, 0.7666667, 0.3833333, …
+## $ awake        <dbl> 11.9, 7.0, 9.6, 9.1, 20.0, 9.6, 15.3, 17.0, 13.9, 21.0, …
+## $ brainwt      <dbl> NA, 0.01550, NA, 0.00029, 0.42300, NA, NA, NA, 0.07000, …
+## $ bodywt       <dbl> 50.000, 0.480, 1.350, 0.019, 600.000, 3.850, 20.490, 0.0…
 ```
 
 
@@ -288,30 +287,30 @@ summary(sleep)
 ```
 
 ```
-##      name              genus               vore          
-##  Length:83          Length:83          Length:83         
-##  Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character  
-##                                                          
-##                                                          
-##                                                          
-##                                                          
-##     order           conservation        sleep_total      sleep_rem    
-##  Length:83          Length:83          Min.   : 1.90   Min.   :0.100  
-##  Class :character   Class :character   1st Qu.: 7.85   1st Qu.:0.900  
-##  Mode  :character   Mode  :character   Median :10.10   Median :1.500  
-##                                        Mean   :10.43   Mean   :1.875  
-##                                        3rd Qu.:13.75   3rd Qu.:2.400  
-##                                        Max.   :19.90   Max.   :6.600  
-##                                                        NA's   :22     
-##   sleep_cycle         awake          brainwt            bodywt        
-##  Min.   :0.1167   Min.   : 4.10   Min.   :0.00014   Min.   :   0.005  
-##  1st Qu.:0.1833   1st Qu.:10.25   1st Qu.:0.00290   1st Qu.:   0.174  
-##  Median :0.3333   Median :13.90   Median :0.01240   Median :   1.670  
-##  Mean   :0.4396   Mean   :13.57   Mean   :0.28158   Mean   : 166.136  
-##  3rd Qu.:0.5792   3rd Qu.:16.15   3rd Qu.:0.12550   3rd Qu.:  41.750  
-##  Max.   :1.5000   Max.   :22.10   Max.   :5.71200   Max.   :6654.000  
-##  NA's   :51                       NA's   :27
+##      name              genus               vore              order          
+##  Length:83          Length:83          Length:83          Length:83         
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##                                                                             
+##  conservation        sleep_total      sleep_rem      sleep_cycle    
+##  Length:83          Min.   : 1.90   Min.   :0.100   Min.   :0.1167  
+##  Class :character   1st Qu.: 7.85   1st Qu.:0.900   1st Qu.:0.1833  
+##  Mode  :character   Median :10.10   Median :1.500   Median :0.3333  
+##                     Mean   :10.43   Mean   :1.875   Mean   :0.4396  
+##                     3rd Qu.:13.75   3rd Qu.:2.400   3rd Qu.:0.5792  
+##                     Max.   :19.90   Max.   :6.600   Max.   :1.5000  
+##                                     NA's   :22      NA's   :51      
+##      awake          brainwt            bodywt        
+##  Min.   : 4.10   Min.   :0.00014   Min.   :   0.005  
+##  1st Qu.:10.25   1st Qu.:0.00290   1st Qu.:   0.174  
+##  Median :13.90   Median :0.01240   Median :   1.670  
+##  Mean   :13.57   Mean   :0.28158   Mean   : 166.136  
+##  3rd Qu.:16.15   3rd Qu.:0.12550   3rd Qu.:  41.750  
+##  Max.   :22.10   Max.   :5.71200   Max.   :6654.000  
+##                  NA's   :27
 ```
 
 
@@ -365,6 +364,7 @@ sleep[ ,1]
 ## [81] "Genet"                          "Arctic fox"                    
 ## [83] "Red fox"
 ```
+
 
 ```r
 sleep[1, ]
@@ -462,28 +462,29 @@ small
 ## 36         <NA>         8.9       2.6   0.2333333  15.1 0.00250  0.104
 ```
 
+
 ```r
 large <- filter(sleep, bodywt>=200)
 large
 ```
 
 ```
-##               name         genus  vore          order conservation
-## 1              Cow           Bos herbi   Artiodactyla domesticated
-## 2   Asian elephant       Elephas herbi    Proboscidea           en
-## 3            Horse         Equus herbi Perissodactyla domesticated
-## 4          Giraffe       Giraffa herbi   Artiodactyla           cd
-## 5      Pilot whale Globicephalus carni        Cetacea           cd
-## 6 African elephant     Loxodonta herbi    Proboscidea           vu
-## 7  Brazilian tapir       Tapirus herbi Perissodactyla           vu
-##   sleep_total sleep_rem sleep_cycle awake brainwt   bodywt
-## 1         4.0       0.7   0.6666667 20.00   0.423  600.000
-## 2         3.9        NA          NA 20.10   4.603 2547.000
-## 3         2.9       0.6   1.0000000 21.10   0.655  521.000
-## 4         1.9       0.4          NA 22.10      NA  899.995
-## 5         2.7       0.1          NA 21.35      NA  800.000
-## 6         3.3        NA          NA 20.70   5.712 6654.000
-## 7         4.4       1.0   0.9000000 19.60   0.169  207.501
+##               name         genus  vore          order conservation sleep_total
+## 1              Cow           Bos herbi   Artiodactyla domesticated         4.0
+## 2   Asian elephant       Elephas herbi    Proboscidea           en         3.9
+## 3            Horse         Equus herbi Perissodactyla domesticated         2.9
+## 4          Giraffe       Giraffa herbi   Artiodactyla           cd         1.9
+## 5      Pilot whale Globicephalus carni        Cetacea           cd         2.7
+## 6 African elephant     Loxodonta herbi    Proboscidea           vu         3.3
+## 7  Brazilian tapir       Tapirus herbi Perissodactyla           vu         4.4
+##   sleep_rem sleep_cycle awake brainwt   bodywt
+## 1       0.7   0.6666667 20.00   0.423  600.000
+## 2        NA          NA 20.10   4.603 2547.000
+## 3       0.6   1.0000000 21.10   0.655  521.000
+## 4       0.4          NA 22.10      NA  899.995
+## 5       0.1          NA 21.35      NA  800.000
+## 6        NA          NA 20.70   5.712 6654.000
+## 7       1.0   0.9000000 19.60   0.169  207.501
 ```
 
 
@@ -538,16 +539,18 @@ max(sleep$sleep_total)
 ## [1] 19.9
 ```
 
+
 ```r
 filter(sleep, sleep_total == 19.9)
 ```
 
 ```
-##               name  genus    vore      order conservation sleep_total
-## 1 Little brown bat Myotis insecti Chiroptera         <NA>        19.9
-##   sleep_rem sleep_cycle awake brainwt bodywt
-## 1         2         0.2   4.1 0.00025   0.01
+##               name  genus    vore      order conservation sleep_total sleep_rem
+## 1 Little brown bat Myotis insecti Chiroptera         <NA>        19.9         2
+##   sleep_cycle awake brainwt bodywt
+## 1         0.2   4.1 0.00025   0.01
 ```
+
 
 ```r
 filter(sleep, sleep_total>=18)
@@ -568,5 +571,5 @@ filter(sleep, sleep_total>=18)
 ## 5        18.1       6.1          NA   5.9 0.08100 60.000
 ```
 
-
-## Push your final code to GitHub
+## Push your final code to GitHub!
+Please be sure that you check the `keep md` file in the knit preferences.  
