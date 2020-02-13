@@ -3,9 +3,9 @@ title: "Lab 5 Homework"
 author: "Lily Chen"
 date: "2/7/2020"
 output:
-  html_document:
+  html_document: 
+    keep_md: yes
     theme: spacelab
-    toc: no
 ---
 
 ```{r setup, include=FALSE}
@@ -18,8 +18,8 @@ Answer the following questions and complete the exercises in RMarkdown. Please e
 ## Libraries
 
 ```{r}
-install.packages("naniar")
-install.packages("skimr")
+install.packages("naniar", repos = "http://cran.us.r-project.org")
+install.packages("skimr", repos = "http://cran.us.r-project.org")
 ```
 
 ```{r}
@@ -200,14 +200,32 @@ amphibio2 %>%
 **10. For the amphibio data, we are interested to know if body size is correlated with litter size? Make a plot that shows this relationship. You should notice that there are outliers. Can you think of a way to identify the outliers for both body size and litter size? What happens when you then re-plot the data?**
 
 ```{r}
-ggplot(data=amphibio2, mapping=aes(x=Body_size_mm, y=Litter_size_min_n)) +
+ggplot(data=amphibio2, mapping=aes(x=Body_size_mm, y=Litter_size_max_n)) +
   geom_jitter() 
 ```
 
 ```{r}
-ggplot(data=amphibio2, mapping=aes(x=Body_size_mm, y=Litter_size_max_n)) +
+summary(amphibio2$Litter_size_max_n, na.rm = T)
+```
+
+```{r}
+700-30 #Value of IQR
+700+(1.5*670)
+30-(1.5*670)
+```
+Any values thay are greater than 1705 will be consider as outliers.
+
+```{r}
+amphibio3 <-
+  amphibio2 %>% 
+  filter(Litter_size_max_n <= 1705)
+```
+
+```{r}
+ggplot(data=amphibio3, mapping=aes(x=Body_size_mm, y=Litter_size_max_n)) +
   geom_jitter() 
 ```
+
 
 
 ## Push your final code to GitHub!
