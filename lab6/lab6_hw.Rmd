@@ -1,7 +1,7 @@
 ---
 title: "Lab 6 Homework"
-author: "Please Add Your Name Here"
-date: "Please Add the Date Here"
+author: "Lily Chen"
+date: "2/15/2020"
 output:
   html_document:
     theme: spacelab
@@ -35,32 +35,168 @@ The questions below are open-ended and have many possible solutions. Your approa
 
 **1. Use the function(s) of your choice to get an idea of the overall structure of the data frame, including its dimensions, column names, variable classes, etc. As part of this, determine how NAs are treated in the data.**  
 
+```{r}
+glimpse(gapminder)
+```
+
+```{r}
+is.na(gapminder)
+```
+
+```{r}
+gapminder
+```
+
 
 **2. Among the interesting variables in gapminder is life expectancy. How has global life expectancy changed between 1952 and 2007?**
+
+```{r}
+gapminder %>% 
+  group_by(year) %>% 
+  summarize(global_lifeExp_mean = mean(lifeExp))
+```
+
+```{r}
+gapminder %>% 
+  group_by(year) %>% 
+  summarize(global_lifeExp_mean = mean(lifeExp)) %>% 
+  ggplot(aes(x = year, y = global_lifeExp_mean)) +
+  geom_point() +
+  geom_line(color = "blue") +
+  labs(title = "Global Life Expectancy Trend",
+       x = "Year",
+       y = "Mean Global Life Expectancy")
+```
 
 
 **3. How do the distributions of life expectancy compare for the years 1952 and 2007? _Challenge: Can you put both distributions on a single plot?_**
 
+```{r}
+gapminder %>% 
+  filter(year == "1952") %>% 
+  ggplot(aes(x = lifeExp)) +
+  geom_histogram(alpha = 0.6, color = "black") +
+  labs(title = "Distribution of Global Life Expectancy",
+       x = "Life Expectancy",
+       y = "Count")
+```
+
+```{r}
+gapminder %>% 
+  filter(year == "2007") %>% 
+  ggplot(aes(x = lifeExp)) +
+  geom_histogram(alpha = 0.6, fill = "steelblue", color = "blue") +
+  labs(title = "Distribution of Global Life Expectancy", 
+       x = "Life Expectancy",
+       y = "Count")
+```
 
 **4. Your answer above doesn't tell the whole story since life expectancy varies by region. Make a summary that shows the min, mean, and max life expectancy by continent for all years represented in the data.**
+
+```{r}
+gapminder %>% 
+  group_by(continent) %>% 
+  summarize(min_lifeExp = min(lifeExp),
+            max_lifeExp = max(lifeExp),
+            mean_lifeExp = mean(lifeExp))
+```
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = continent, y = lifeExp, fill = continent)) +
+  geom_boxplot() +
+  labs(title = "Life Expectancy Summary by Continent",
+       x = "Continent",
+       y = "Life Expectancy")
+```
 
 
 **5. How has life expectancy changed between 1952-2007 for each continent? Try using `geom_line()` for this, including all continents on the same  plot.**
 
+```{r}
+gapminder %>% 
+  ggplot(aes(x = year, y = lifeExp)) +
+  geom_line() +
+  labs(title = "Life Expectancy for Each Continent",
+       x = "Year",
+       y = "Life Expectancy") +
+  facet_wrap(~continent)
+```
+
 
 **6. We are interested in the relationship between per capita GDP and life expectancy; i.e. does having more money help you live longer?**
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp)) +
+  geom_jitter() +
+  labs(title = "Per Capita GDP vs. Life Expectancy",
+       x = "Per Capita GDP",
+       y = "Life Expectancy") +
+  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5))
+```
 
 
 **7. There is extreme disparity in per capita GDP. Rescale the x axis to make this easier to interpret. How would you characterize the relationship?**
 
+```{r}
+gapminder %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp)) +
+  geom_jitter() +
+  scale_x_log10() +
+  labs(title = "Per Capita GDP vs. Life Expectancy",
+       x = "Per Capita GDP",
+       y = "Life Expectancy") +
+  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5)) +
+  geom_smooth(method = lm, se = F)
+```
+
 
 **8. Which countries have had the largest population growth since 1952?**
+
+```{r}
+gapminder %>% 
+  group_by(country) %>% 
+  summarize(pop_growth = max(pop)-min(pop)) %>% 
+  arrange(desc(pop_growth))
+```
 
 
 **9. Use your results from the question above to plot population growth for the top five countries since 1952.**
 
+```{r}
+gapminder %>% 
+  filter(country == "China"| country =="India" | country == "United States"| country == "Indonesia"| country == "Brazil") %>% 
+  ggplot(aes(x = year, y = pop)) +
+  geom_point() +
+  geom_line(color = "blue") +
+  labs(title = "Year vs. Population",
+       x = "Year",
+       y = "Population") +
+  facet_wrap(~country)
+```
 
 **10. How does per capita GDP growth compare between these same five countries?**
+
+```{r}
+gapminder %>% 
+  filter(country == "China"| country =="India" | country == "United States"| country == "Indonesia"| country == "Brazil") %>% 
+  group_by(country) %>% 
+  summarize(gdpPercap_growth = max(gdpPercap)-min(gdpPercap)) %>% 
+  arrange(desc(gdpPercap_growth))
+```
+
+```{r}
+gapminder %>% 
+  filter(country == "China"| country =="India" | country == "United States"| country == "Indonesia"| country == "Brazil") %>% 
+  ggplot(aes(x = year, y = gdpPercap)) +
+  geom_point() +
+  geom_line(color = "blue") +
+  labs(title = "Year vs. GDP Per Capita",
+       x = "Year",
+       y = "GDP Per Capita") +
+  facet_wrap(~country)
+```
 
 
 ## Push your final code to GitHub!

@@ -218,16 +218,29 @@ summary(homerange$log10.hra)
 homerange <- 
   homerange %>% 
   mutate(range_category = case_when(log10.hra <= 3.65 ~ "very_small",
-                                    log10.hra > 3.65, log10.hra <= 4.59 ~ "small",
+                                    log10.hra > 3.65 & log10.hra <= 4.59 ~ "small",
                                     log10.hra > 4.59 & log10.hra <= 6.02 ~ "medium",
                                     log10.hra > 6.02 ~ "large"))
 ```
 
-
 2. How many and which taxonomic classes are represented in each of the `range_category` classes?
 
+```{r}
+homerange %>% 
+  group_by(range_category) %>% 
+  summarize(class_number = n_distinct(taxon))
+```
 
 3. Isolate the small `range_category` and plot the range of `log10.mass` by taxonomic class.
+
+```{r}
+homerange %>% 
+  filter(range_category == "small") %>% 
+  ggplot(aes(x = taxon, y = log10.mass, fill = taxon)) +
+  geom_boxplot()+
+  coord_flip()
+```
+
 
 ## Faceting: `facet_wrap()`
 Faceting is one of the most amazing features of ggplot. It allows you to make multi-panel plots for easy comparison. Here, I am making histograms of log10.mass for every taxon. We read the `~` in the `facet_wrap()` layer as `by`.

@@ -1,0 +1,177 @@
+---
+title: "Project"
+author: "Lily Chen"
+date: "2/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+**1. Load data and library. (tidyverse, naniar, skimr, visdat)**
+
+```{r}
+library("naniar")
+library("skimr")
+```
+
+```{r}
+getwd()
+```
+
+
+```{r}
+suicide <- readr::read_csv("data/master.csv")
+```
+
+**2. Use the function(s) of your choice to get an idea of the overall structure of the data frame, including its dimensions, column names, variable classes, etc. As part of this, determine how NAs are treated in the data. Summarize the number and percentage of NAs in each column. Visualize NAs.**
+
+```{r}
+glimpse(suicide)
+```
+
+```{r}
+suicide %>% 
+  summarize(number_nas = sum(is.na(suicide)))
+```
+
+```{r}
+suicide %>% 
+  purrr::map_df(~ sum(is.na(.))) %>% 
+  pivot_longer(everything(),
+               names_to = "variables",
+               values_to = "num_nas") %>% 
+  arrange(desc(num_nas))
+```
+
+```{r}
+naniar::miss_var_summary(suicide)
+```
+
+**3. Make necessary changes to clean the data. (Tidy data, change classes of variable, rename column names, replace NAs, etc.)**
+
+```{r}
+names(suicide) <- str_replace_all(names(suicide), c(" " = "_", "/" = "_", "-" = "_"))
+```
+
+```{r}
+suicide <-
+suicide %>% 
+  dplyr::rename(
+    suicide_number = suicides_no,
+    suicide_per_100kpop = suicides_100k_pop)
+```
+
+```{r}
+suicide$country <- as.factor(suicide$country)
+suicide$age <- as.factor(suicide$age)
+suicide$sex <- as.factor(suicide$sex)
+suicide$country_year <- as.factor(suicide$country_year)
+suicide$generation <- as.factor(suicide$generation)
+```
+
+
+```{r}
+glimpse(suicide)
+```
+
+**4. How has global suicide number, population, suicide rate changed between 1985 and 2016?**
+
+```{r}
+suicide %>% 
+  group_by(year) %>% 
+  summarize(suicide_number = sum(suicide_number), population = sum(population), suicide_per_100kpop = sum(suicide_per_100kpop), suicide_rate = (suicide_number)/(population))
+```
+
+
+```{r}
+suicide %>% 
+  group_by(year) %>% 
+  summarize(suicide_number = sum(suicide_number), population = sum(population), suicide_per_100kpop = sum(suicide_per_100kpop), suicide_rate = (suicide_number)/(population)) %>% 
+  ggplot(aes(x = year, y = suicide_number)) +
+  geom_point() +
+  geom_line(color = "red") +
+  labs(title = "Year vs. Suicide Number",
+       y = "suicide number")
+```
+
+```{r}
+suicide %>% 
+  group_by(year) %>% 
+  summarize(suicide_number = sum(suicide_number), population = sum(population), suicide_per_100kpop = sum(suicide_per_100kpop), suicide_rate = (suicide_number)/(population)) %>% 
+  ggplot(aes(x = year, y = population)) +
+  geom_point() +
+  geom_line(color = "red") +
+  labs(title = "Year vs. Population",
+       y = "populationr")
+```
+
+```{r}
+suicide %>% 
+  group_by(year) %>% 
+  summarize(suicide_number = sum(suicide_number), population = sum(population), suicide_per_100kpop = sum(suicide_per_100kpop), suicide_rate = (suicide_number)/(population)) %>% 
+  ggplot(aes(x = year, y = suicide_rate)) +
+  geom_point() +
+  geom_line(color = "red") +
+  labs(title = "Year vs. Suicide Rate",
+       y = "suicide rater")
+```
+
+**5. Summarize suicide number and suicide rate bewteen female and male.**
+```{r}
+suicide %>% 
+  group_by(sex) %>% 
+  summarize(num_suicide = sum(suicide_number))
+```
+
+```{r}
+suicide %>% 
+  group_by(sex) %>% 
+  summarize(num_suicide = sum(suicide_number)) %>% 
+  ggplot(aes(x = sex, y = num_suicide)) +
+  geom_bar (stat = "identity") +
+  labs(title = "Sex vs. Suicide Number",
+       y = "suicide number")
+```
+
+**6. Summarize suicide number and suicide rate among different age groups.**
+
+```{r}
+suicide %>% 
+  group_by(age) %>% 
+  summarize(num_suicide = sum(suicide_number)) 
+```
+
+```{r}
+suicide %>% 
+  group_by(age) %>% 
+  summarize(num_suicide = sum(suicide_number)) %>% 
+  ggplot(aes(x = age, y = num_suicide)) +
+  geom_bar (stat = "identity") +
+  labs(title = "Age vs. Suicide Number",
+       y = "suicide number")
+```
+
+**7. Summarize suicide number and suicide rate among different generations.**
+
+```{r}
+suicide %>% 
+  group_by(generation) %>% 
+  summarize(num_suicide = sum(suicide_number))
+```
+
+```{r}
+suicide %>% 
+  group_by(generation) %>% 
+  summarize(num_suicide = sum(suicide_number)) %>% 
+  ggplot(aes(x = generation, y = num_suicide)) +
+  geom_bar (stat = "identity") +
+  labs(title = "Generation vs. Suicide Number",
+       y = "suicide number")
+```
+
