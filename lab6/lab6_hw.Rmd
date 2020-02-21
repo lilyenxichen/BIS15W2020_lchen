@@ -3,9 +3,9 @@ title: "Lab 6 Homework"
 author: "Lily Chen"
 date: "2/15/2020"
 output:
-  html_document:
+  html_document: 
+    keep_md: yes
     theme: spacelab
-    toc: no
 ---
 
 ```{r setup, include=FALSE}
@@ -42,6 +42,11 @@ glimpse(gapminder)
 ```{r}
 is.na(gapminder)
 ```
+
+```{r}
+anyNA(gapminder)
+```
+
 
 ```{r}
 gapminder
@@ -115,12 +120,21 @@ gapminder %>%
 
 ```{r}
 gapminder %>% 
-  ggplot(aes(x = year, y = lifeExp)) +
-  geom_line() +
+  group_by(continent, year) %>% 
+  summarize(lifeExp_per_year = mean(lifeExp))
+```
+
+
+```{r}
+gapminder %>% 
+  group_by(continent, year) %>% 
+  summarize(lifeExp_per_year = mean(lifeExp)) %>% 
+  ggplot(aes(x = year, y = lifeExp_per_year, color = continent)) +
+  geom_point() +
+  geom_line()
   labs(title = "Life Expectancy for Each Continent",
        x = "Year",
-       y = "Life Expectancy") +
-  facet_wrap(~continent)
+       y = "Life Expectancy")
 ```
 
 
@@ -176,6 +190,17 @@ gapminder %>%
   facet_wrap(~country)
 ```
 
+```{r}
+gapminder %>% 
+  filter(country == "China"| country =="India" | country == "United States"| country == "Indonesia"| country == "Brazil") %>% 
+  ggplot(aes(x = year, y = pop, color = country)) +
+  geom_point() +
+  geom_line() +
+  labs(title = "Year vs. Population",
+       x = "Year",
+       y = "Population") 
+```
+
 **10. How does per capita GDP growth compare between these same five countries?**
 
 ```{r}
@@ -196,6 +221,17 @@ gapminder %>%
        x = "Year",
        y = "GDP Per Capita") +
   facet_wrap(~country)
+```
+
+```{r}
+gapminder %>% 
+  filter(country == "China"| country =="India" | country == "United States"| country == "Indonesia"| country == "Brazil") %>% 
+  ggplot(aes(x = year, y = gdpPercap, color = country)) +
+  geom_point() +
+  geom_line() +
+  labs(title = "Year vs. GDP Per Capita",
+       x = "Year",
+       y = "GDP Per Capita") 
 ```
 
 
