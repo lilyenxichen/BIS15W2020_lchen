@@ -448,14 +448,14 @@ library(shinydashboard)</code></pre>
   ), # close the first box
   box(title = &quot;Plot of UC Admissions by Ethnicity Data&quot;, width = 10,
   plotOutput(&quot;plot&quot;, width = &quot;1000px&quot;, height = &quot;400px&quot;)
-  ) # close the second box
-  ) # close the row
-  ) # close the dashboard body
-) # close the ui
+  ) 
+  ) 
+  ) 
+) 
 
 server &lt;- function(input, output, session) { 
   
-  # the code to make the plot of iris data grouped by species
+  
   output$plot &lt;- renderPlot({
       ggplot(UC_admit, aes_string(x = &quot;Ethnicity&quot;, y = &quot;FilteredCountFR&quot;, fill = input$fill)) + 
       geom_col(position = &quot;dodge&quot;) +
@@ -467,7 +467,7 @@ server &lt;- function(input, output, session) {
     
  })
   
-  # stop the app when we close it
+  
   session$onSessionEnded(stopApp)
   
   }
@@ -487,14 +487,14 @@ shinyApp(ui, server)</code></pre>
   ), # close the first box
   box(title = &quot;Plot of UC Enrollment by Year Data&quot;, width = 10,
   plotOutput(&quot;plot&quot;, width = &quot;1200px&quot;, height = &quot;400px&quot;)
-  ) # close the second box
-  ) # close the row
-  ) # close the dashboard body
-) # close the ui
+  ) 
+  ) 
+  ) 
+) 
 
 server &lt;- function(input, output, session) { 
   
-  # the code to make the plot of iris data grouped by species
+  
   output$plot &lt;- renderPlot({
       ggplot(UC_admit, aes_string(x = &quot;Academic_Yr&quot;, y = &quot;FilteredCountFR&quot;, fill = input$fill)) + 
       geom_col(position = &quot;dodge&quot;) +
@@ -505,7 +505,7 @@ server &lt;- function(input, output, session) {
     
  })
   
-  # stop the app when we close it
+  
   session$onSessionEnded(stopApp)
   
   }
