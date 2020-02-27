@@ -28,6 +28,7 @@ For this assignment, we are going to use the dataset [gapminder](https://cran.r-
 ```{r}
 #install.packages("gapminder")
 library("gapminder")
+library("naniar")
 ```
 
 ## Questions
@@ -45,6 +46,10 @@ is.na(gapminder)
 
 ```{r}
 anyNA(gapminder)
+```
+
+```{r}
+naniar::miss_var_summary(gapminder) #naniar also does a good job checking for na's
 ```
 
 
@@ -131,7 +136,7 @@ gapminder %>%
   summarize(lifeExp_per_year = mean(lifeExp)) %>% 
   ggplot(aes(x = year, y = lifeExp_per_year, color = continent)) +
   geom_point() +
-  geom_line()
+  geom_line()+
   labs(title = "Life Expectancy for Each Continent",
        x = "Year",
        y = "Life Expectancy")
