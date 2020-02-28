@@ -123,6 +123,7 @@ suicide %>%
 ```
 
 **5. Summarize suicide number and suicide rate bewteen female and male.**
+
 ```{r}
 suicide %>% 
   group_by(sex) %>% 
