@@ -9,15 +9,15 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
-library(tidyverse)
-```
 
 **1. Load data and library. (tidyverse, naniar, skimr, visdat)**
 
 ```{r}
-library("naniar")
-library("skimr")
+library(naniar)
+library(skimr)
+library(tidyverse)
+library(shiny)
+library(shinydashboard)
 ```
 
 ```{r}
@@ -175,4 +175,60 @@ suicide %>%
   labs(title = "Generation vs. Suicide Number",
        y = "suicide number")
 ```
+
+**8. Summarize relationship between suicide rate and gdp per capita**
+
+```{r}
+suicide %>% 
+  ggplot(aes(x = `gdp_per_capita_($)`, y = suicide_per_100kpop)) +
+  geom_jitter () +
+  labs(title = "GDP Per Capita vs. Suicide Per 100k Popullation",
+       x = "GDP Per Capita",
+       y = "Suicide Per 100k Population")
+```
+
+**9. Shiny App**
+```{r}
+ui <- dashboardPage(
+  dashboardHeader(title = "Suicide Per 100k Pop by Age Group"),
+  dashboardSidebar(disable = T),
+  dashboardBody(
+    fluidRow(
+      box(title = "Plot Options", width = 3,
+          selectInput("x", "Select Year", choices = unique(suicide$year), 
+                       selected = "2010"),
+          selectInput("y", "Select Country", choices = unique(suicide$country),
+                      selected = "Albania"),
+          selectInput("z", "Select Sex", choices = unique(suicide$sex),
+                      selected = "Male")
+      ), # close the first box
+      box(title = "Suicide Per 100k Pop by Age Group", width = 7,
+          plotOutput("plot", width = "600px", height = "500px")
+      ) # close the second box
+    ) # close the row
+  ) # close the dashboard body
+) # close the ui
+
+server <- function(input, output, session) { 
+  
+  output$plot <- renderPlot({
+    suicide %>% 
+      filter(year==input$x & country==input$y & sex==input$z) %>% 
+      ggplot(aes(x=age, y=suicide_per_100kpop)) + 
+      geom_col(color="black", fill="steelblue", alpha=0.75) +
+      theme_light(base_size = 18) +
+      theme(axis.text.x = element_text(angle = 60, hjust = 1))+
+      labs(x = "Age Group", y = "Suicide Per 100k Pop")
+  })
+  
+  # stop the app when we close it
+  session$onSessionEnded(stopApp)
+  
+}
+
+shinyApp(ui, server)
+```
+
+
+
 
