@@ -1,4 +1,4 @@
 # BIS15W2020_lchen
 Lily Chen
 
-This is Lily's Repository for BIS 15L, Winter Quarter 2020.
+Welcome! This repository includes all the notes and homework from BIS 15L.
