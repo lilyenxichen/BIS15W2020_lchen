@@ -1,58 +1,66 @@
 ---
-title: "Project"
+title: "Project: Suicide in Global Scale"
 author: "Lily Chen"
 date: "2/28/2020"
 output: ioslides_presentation
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+#install.packages(jpeg)
+#intsall.packages(naniar)
+#intsall.packages(skimr)
+#intsall.packages(tidyverse)
+#intsall.packages(shiny)
+#intsall.packages(shinydashboard)
 ```
 
 
-**1. Load data and library. (tidyverse, naniar, skimr, visdat)**
+## Introduction
 
-```{r}
+
+## Reference
+-United Nations Development Program. (2018). Human development index (HDI). Retrieved from http://hdr.undp.org/en/indicators/137506
+
+-World Bank. (2018). World development indicators: GDP (current US$) by country:1985 to 2016. Retrieved from http://databank.worldbank.org/data/source/world-development-indicators#[Szamil]. (2017). 
+
+-Suicide in the Twenty-First Century [dataset]. Retrieved from https://www.kaggle.com/szamil/suicide-in-the-twenty-first-century/notebook
+
+-World Health Organization. (2018). Suicide prevention. Retrieved from http://www.who.int/mental_health/suicide-prevention/en/
+
+
+## Library
+Here are the libraries that we use for analyzing the data.
+```{r echo=TRUE, message=FALSE}
+library(jpeg)
 library(naniar)
 library(skimr)
 library(tidyverse)
 library(shiny)
 library(shinydashboard)
-library(jpeg)
 ```
 
-```{r}
-getwd()
-```
-
-
-```{r}
+## Load Data
+```{r echo=TRUE, message=FALSE}
 suicide <- readr::read_csv("data/master.csv")
 ```
 
-**2. Use the function(s) of your choice to get an idea of the overall structure of the data frame, including its dimensions, column names, variable classes, etc. As part of this, determine how NAs are treated in the data. Summarize the number and percentage of NAs in each column. Visualize NAs.**
-
-```{r}
+## Data Overview
+```{r echo=TRUE}
 glimpse(suicide)
 ```
 
-```{r}
-suicide %>% 
-  summarize(number_nas = sum(is.na(suicide)))
-```
-
-
-```{r}
+## NAs Overview
+```{r echo=FALSE}
 naniar::miss_var_summary(suicide)
 ```
 
-**3. Make necessary changes to clean the data. (Tidy data, change classes of variable, rename column names, replace NAs, etc.)**
-
-```{r}
+## Clean Dara
+```{r echo=TRUE, message=FALSE}
 names(suicide) <- str_replace_all(names(suicide), c(" " = "_", "/" = "_", "-" = "_"))
 ```
 
-```{r}
+```{r echo=TRUE, message=FALSE}
 suicide <-
 suicide %>% 
   dplyr::rename(
@@ -60,7 +68,7 @@ suicide %>%
     suicide_per_100kpop = suicides_100k_pop)
 ```
 
-```{r}
+```{r echo=TRUE, message=FALSE}
 suicide$country <- as.factor(suicide$country)
 suicide$age <- as.factor(suicide$age)
 suicide$sex <- as.factor(suicide$sex)
@@ -69,21 +77,20 @@ suicide$generation <- as.factor(suicide$generation)
 suicide$year <- as.factor(suicide$year)
 ```
 
-
-```{r}
+## Data Overview
+```{r echo=TRUE}
 glimpse(suicide)
 ```
 
-**4. How has global suicide number, population, suicide rate changed between 1985 and 2016?**
-
-```{r}
+## Group by Year: Suicide Number and Suicide Rate 
+```{r echo=FALSE, message=FALSE}
 suicide %>% 
   group_by(year) %>% 
   summarize(suicide_number = sum(suicide_number), population = sum(population), suicide_per_100kpop = sum(suicide_per_100kpop), suicide_rate = (suicide_number)/(population))
 ```
 
-
-```{r}
+## Group by Year: Suicide Number
+```{r echo=FALSE, message=FALSE}
 suicide %>% 
   group_by(year) %>% 
   summarize(suicide_number = sum(suicide_number), population = sum(population), suicide_per_100kpop = sum(suicide_per_100kpop), suicide_rate = (suicide_number)/(population)) %>% 
@@ -92,10 +99,10 @@ suicide %>%
   theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
   labs(title = "Year vs. Suicide Number",
        y = "suicide number")
-
 ```
 
-```{r}
+## Group by Year: Population
+```{r echo=FALSE, message=FALSE}
 suicide %>% 
   group_by(year) %>% 
   summarize(suicide_number = sum(suicide_number), population = sum(population), suicide_per_100kpop = sum(suicide_per_100kpop), suicide_rate = (suicide_number)/(population)) %>% 
@@ -106,7 +113,8 @@ suicide %>%
        y = "population")
 ```
 
-```{r}
+## Group by Year: Suicide Rate
+```{r echo=FALSE, message=FALSE}
 suicide %>% 
   group_by(year) %>% 
   summarize(suicide_number = sum(suicide_number), population = sum(population), suicide_per_100kpop = sum(suicide_per_100kpop), suicide_rate = (suicide_number)/(population)) %>% 
@@ -117,15 +125,15 @@ suicide %>%
        y = "suicide rater")
 ```
 
-**5. Summarize suicide number and suicide rate bewteen female and male.**
-
-```{r}
+## Group by Sex: Suicide Number and Suicide Rate
+```{r echo=FALSE, message=FALSE}
 suicide %>% 
   group_by(sex) %>% 
   summarize(num_suicide = sum(suicide_number), population = sum(population), suicide_per_100kpop = sum(suicide_per_100kpop), suicide_rate = (num_suicide)/(population))
 ```
 
-```{r}
+## Group by Sex: Suicide Number
+```{r echo=FALSE, message=FALSE}
 suicide %>% 
   group_by(sex) %>% 
   summarize(num_suicide = sum(suicide_number)) %>% 
@@ -135,8 +143,8 @@ suicide %>%
        y = "suicide number")
 ```
 
-
-```{r}
+## Group by Sex: Population
+```{r echo=FALSE, message=FALSE}
 suicide %>% 
   group_by(sex) %>% 
   summarize(population = sum(population)) %>% 
@@ -146,18 +154,28 @@ suicide %>%
        y = "population")
 ```
 
-
-**6. Summarize suicide number and suicide rate among different age groups.**
-
-```{r}
+## Group by Sex: Suicide Rate
+```{r echo=FALSE, message=FALSE}
 suicide %>% 
-  mutate(age_class=case_when(age=="5-14 years" ~ "A(5-14)", age=="15-24 years" ~ "B(15-24)", age=="25-34 years" ~ "C(25-34)", age=="35-54 years" ~ "D(35-45)", age=="55-74 years" ~ "E(55-74)",age=="75+ years" ~ "F(75+)" )) %>% 
-  group_by(age_class) %>% 
-  summarize(num_suicide = sum(suicide_number))
+  group_by(sex) %>% 
+  summarize(num_suicide = sum(suicide_number), population = sum(population), suicide_per_100kpop = sum(suicide_per_100kpop), suicide_rate = (num_suicide)/(population)) %>%  
+  ggplot(aes(x = sex, y = suicide_rate)) +
+  geom_bar (stat = "identity") +
+  labs(title = "Sex vs. Suicide Rate",
+       y = "suicide rate")
 ```
 
 
-```{r}
+## Group by Age: Suicide Number and Suicide Rate
+```{r echo=FALSE, message=FALSE}
+suicide %>% 
+  mutate(age_class=case_when(age=="5-14 years" ~ "A(5-14)", age=="15-24 years" ~ "B(15-24)", age=="25-34 years" ~ "C(25-34)", age=="35-54 years" ~ "D(35-45)", age=="55-74 years" ~ "E(55-74)",age=="75+ years" ~ "F(75+)" )) %>% 
+  group_by(age_class) %>% 
+  summarize(num_suicide = sum(suicide_number), population = sum(population), suicide_per_100kpop = sum(suicide_per_100kpop), suicide_rate = (num_suicide)/(population))
+```
+
+## Group by Age: Suicide Number
+```{r echo=FALSE, message=FALSE}
 suicide %>% 
   group_by(age) %>% 
   summarize(num_suicide = sum(suicide_number)) %>% 
@@ -168,7 +186,8 @@ suicide %>%
        y = "suicide number")
 ```
 
-```{r}
+## Group by Age: Population
+```{r echo=FALSE, message=FALSE}
 suicide %>% 
   group_by(age) %>% 
   summarize(population = sum(population)) %>% 
@@ -179,10 +198,21 @@ suicide %>%
        y = "population")
 ```
 
+## Group by Age: Suicide Rate
+```{r echo=FALSE, message=FALSE}
+suicide %>% 
+  group_by(age) %>% 
+  summarize(num_suicide = sum(suicide_number), population = sum(population), suicide_per_100kpop = sum(suicide_per_100kpop), suicide_rate = (num_suicide)/(population)) %>% 
+  ggplot(aes(x = age, y = suicide_rate)) +
+  geom_bar (stat = "identity") +
+  scale_x_discrete(limits=c("5-14 years", "15-24 years", "25-34 years", "35-54 years", "55-74 years", "75+ years"))
+  labs(title = "Age vs. Suicide Rate",
+       y = "suicide rate")
+```
 
-**8. Summarize relationship between suicide rate and gdp per capita**
 
-```{r}
+## Suicide Rate vs. GDP Per Capita
+```{r echo=FALSE, message=FALSE}
 suicide %>% 
   ggplot(aes(x = `gdp_per_capita_($)`, y = suicide_per_100kpop)) +
   geom_jitter () +
@@ -191,8 +221,8 @@ suicide %>%
        y = "Suicide Per 100k Population")
 ```
 
-**9. Shiny App**
-```{r}
+##Shiny App 1
+```{r include=FALSE}
 ui <- dashboardPage(
   dashboardHeader(title = "Suicide Per 100k Pop by Age Group"),
   dashboardSidebar(disable = T),
