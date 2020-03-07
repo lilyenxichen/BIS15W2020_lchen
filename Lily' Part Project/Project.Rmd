@@ -2,7 +2,7 @@
 title: "Project"
 author: "Lily Chen"
 date: "2/28/2020"
-output: html_document
+output: ioslides_presentation
 ---
 
 ```{r setup, include=FALSE}
@@ -18,6 +18,7 @@ library(skimr)
 library(tidyverse)
 library(shiny)
 library(shinydashboard)
+library(jpeg)
 ```
 
 ```{r}
@@ -40,14 +41,6 @@ suicide %>%
   summarize(number_nas = sum(is.na(suicide)))
 ```
 
-```{r}
-suicide %>% 
-  purrr::map_df(~ sum(is.na(.))) %>% 
-  pivot_longer(everything(),
-               names_to = "variables",
-               values_to = "num_nas") %>% 
-  arrange(desc(num_nas))
-```
 
 ```{r}
 naniar::miss_var_summary(suicide)
@@ -73,6 +66,7 @@ suicide$age <- as.factor(suicide$age)
 suicide$sex <- as.factor(suicide$sex)
 suicide$country_year <- as.factor(suicide$country_year)
 suicide$generation <- as.factor(suicide$generation)
+suicide$year <- as.factor(suicide$year)
 ```
 
 
@@ -95,9 +89,10 @@ suicide %>%
   summarize(suicide_number = sum(suicide_number), population = sum(population), suicide_per_100kpop = sum(suicide_per_100kpop), suicide_rate = (suicide_number)/(population)) %>% 
   ggplot(aes(x = year, y = suicide_number)) +
   geom_point() +
-  geom_line(color = "red") +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
   labs(title = "Year vs. Suicide Number",
        y = "suicide number")
+
 ```
 
 ```{r}
@@ -106,9 +101,9 @@ suicide %>%
   summarize(suicide_number = sum(suicide_number), population = sum(population), suicide_per_100kpop = sum(suicide_per_100kpop), suicide_rate = (suicide_number)/(population)) %>% 
   ggplot(aes(x = year, y = population)) +
   geom_point() +
-  geom_line(color = "red") +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
   labs(title = "Year vs. Population",
-       y = "populationr")
+       y = "population")
 ```
 
 ```{r}
@@ -117,7 +112,7 @@ suicide %>%
   summarize(suicide_number = sum(suicide_number), population = sum(population), suicide_per_100kpop = sum(suicide_per_100kpop), suicide_rate = (suicide_number)/(population)) %>% 
   ggplot(aes(x = year, y = suicide_rate)) +
   geom_point() +
-  geom_line(color = "red") +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
   labs(title = "Year vs. Suicide Rate",
        y = "suicide rater")
 ```
@@ -127,7 +122,7 @@ suicide %>%
 ```{r}
 suicide %>% 
   group_by(sex) %>% 
-  summarize(num_suicide = sum(suicide_number))
+  summarize(num_suicide = sum(suicide_number), population = sum(population), suicide_per_100kpop = sum(suicide_per_100kpop), suicide_rate = (num_suicide)/(population))
 ```
 
 ```{r}
@@ -140,13 +135,27 @@ suicide %>%
        y = "suicide number")
 ```
 
+
+```{r}
+suicide %>% 
+  group_by(sex) %>% 
+  summarize(population = sum(population)) %>% 
+  ggplot(aes(x = sex, y = population)) +
+  geom_bar (stat = "identity") +
+  labs(title = "Sex vs. Population",
+       y = "population")
+```
+
+
 **6. Summarize suicide number and suicide rate among different age groups.**
 
 ```{r}
 suicide %>% 
-  group_by(age) %>% 
-  summarize(num_suicide = sum(suicide_number)) 
+  mutate(age_class=case_when(age=="5-14 years" ~ "A(5-14)", age=="15-24 years" ~ "B(15-24)", age=="25-34 years" ~ "C(25-34)", age=="35-54 years" ~ "D(35-45)", age=="55-74 years" ~ "E(55-74)",age=="75+ years" ~ "F(75+)" )) %>% 
+  group_by(age_class) %>% 
+  summarize(num_suicide = sum(suicide_number))
 ```
+
 
 ```{r}
 suicide %>% 
@@ -154,27 +163,22 @@ suicide %>%
   summarize(num_suicide = sum(suicide_number)) %>% 
   ggplot(aes(x = age, y = num_suicide)) +
   geom_bar (stat = "identity") +
+  scale_x_discrete(limits=c("5-14 years", "15-24 years", "25-34 years", "35-54 years", "55-74 years", "75+ years"))
   labs(title = "Age vs. Suicide Number",
        y = "suicide number")
 ```
 
-**7. Summarize suicide number and suicide rate among different generations.**
-
 ```{r}
 suicide %>% 
-  group_by(generation) %>% 
-  summarize(num_suicide = sum(suicide_number))
-```
-
-```{r}
-suicide %>% 
-  group_by(generation) %>% 
-  summarize(num_suicide = sum(suicide_number)) %>% 
-  ggplot(aes(x = generation, y = num_suicide)) +
+  group_by(age) %>% 
+  summarize(population = sum(population)) %>% 
+  ggplot(aes(x = age, y = population)) +
   geom_bar (stat = "identity") +
-  labs(title = "Generation vs. Suicide Number",
-       y = "suicide number")
+  scale_x_discrete(limits=c("5-14 years", "15-24 years", "25-34 years", "35-54 years", "55-74 years", "75+ years"))
+  labs(title = "Age vs. Population",
+       y = "population")
 ```
+
 
 **8. Summarize relationship between suicide rate and gdp per capita**
 
