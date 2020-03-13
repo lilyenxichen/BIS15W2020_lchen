@@ -1,4 +1,6 @@
 # BIS15W2020_lchen
 Lily Chen
 
-Welcome! This repository includes all the notes and homework from BIS 15L, winter quarter 2020.
+Welcome! This is Lily's repository for BIS 15L that includes all the labs, notes, homework and midterm!
+
+![](Others/Octocat.jpg)
